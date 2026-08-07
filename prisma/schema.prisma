@@ -1,0 +1,400 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  SALES
+  HR
+  ACCOUNTANT
+  MARKETING
+  VIEWER
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  FOLLOW_UP
+  QUALIFIED
+  WON
+  LOST
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PARTIAL
+  PAID
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  COMPLETED
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LEAVE
+  HALF_DAY
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  email String @unique
+
+  password String
+
+  role UserRole @default(SALES)
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  leads Lead[]
+
+  tasks Task[]
+
+  orders Order[]
+}
+model Customer {
+  id Int @id @default(autoincrement())
+
+  customerId String @unique
+
+  fullName String
+
+  mobile String
+
+  email String?
+
+  city String?
+
+  state String?
+
+  address String?
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  leads Lead[]
+
+  orders Order[]
+}
+
+model Lead {
+  id Int @id @default(autoincrement())
+
+  leadId String @unique
+
+  fullName String
+
+  mobile String
+
+  email String?
+
+  city String?
+
+  source String?
+
+  status LeadStatus @default(NEW)
+
+  remarks String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  assignedToId Int?
+
+  customerId Int?
+
+  assignedTo User? @relation(fields: [assignedToId], references: [id])
+
+  customer Customer? @relation(fields: [customerId], references: [id])
+
+  followUps FollowUp[]
+
+  notes Note[]
+}
+
+model FollowUp {
+  id Int @id @default(autoincrement())
+
+  leadId Int
+
+  followDate DateTime
+
+  remarks String?
+
+  createdAt DateTime @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id Int @id @default(autoincrement())
+
+  leadId Int
+
+  content String
+
+  createdAt DateTime @default(now())
+
+  lead Lead @relation(fields: [leadId], references: [id], onDelete: Cascade)
+}
+model Product {
+  id Int @id @default(autoincrement())
+
+  productCode String @unique
+
+  name String
+
+  category String
+
+  brand String?
+
+  description String?
+
+  mrp Float
+
+  dp Float
+
+  gst Float @default(18)
+
+  stock Int @default(0)
+
+  minStock Int @default(10)
+
+  active Boolean @default(true)
+
+  image String?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  inventory Inventory?
+
+  orderItems OrderItem[]
+}
+
+model Inventory {
+  id Int @id @default(autoincrement())
+
+  productId Int @unique
+
+  quantity Int @default(0)
+
+  warehouse String?
+
+  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+
+  orderNumber String @unique
+
+  customerId Int
+
+  userId Int
+
+  status OrderStatus @default(PENDING)
+
+  paymentStatus PaymentStatus @default(PENDING)
+
+  subtotal Float
+
+  tax Float
+
+  discount Float @default(0)
+
+  total Float
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  customer Customer @relation(fields: [customerId], references: [id])
+
+  user User @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+
+  productId Int
+
+  quantity Int
+
+  price Float
+
+  total Float
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  product Product @relation(fields: [productId], references: [id])
+}
+model Expense {
+  id          Int      @id @default(autoincrement())
+  title       String
+  category    String
+  amount      Float
+  notes       String?
+  expenseDate DateTime
+  createdAt   DateTime @default(now())
+}
+
+model Payment {
+  id          Int      @id @default(autoincrement())
+  orderId     Int?
+  amount      Float
+  method      String
+  reference   String?
+  paymentDate DateTime @default(now())
+}
+
+model Department {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  employees Employee[]
+}
+
+model Employee {
+  id Int @id @default(autoincrement())
+
+  employeeCode String @unique
+
+  fullName String
+
+  email String? @unique
+
+  mobile String?
+
+  designation String?
+
+  departmentId Int?
+
+  salary Float?
+
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  department Department? @relation(fields: [departmentId], references: [id])
+
+  attendance Attendance[]
+}
+
+model Attendance {
+  id Int @id @default(autoincrement())
+
+  employeeId Int
+
+  date DateTime
+
+  status AttendanceStatus
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+}
+
+model Campaign {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  type String
+
+  audience String?
+
+  budget Float?
+
+  status String
+
+  startDate DateTime?
+
+  endDate DateTime?
+
+  createdAt DateTime @default(now())
+}
+
+model Task {
+  id Int @id @default(autoincrement())
+
+  title String
+
+  description String?
+
+  priority String
+
+  status TaskStatus @default(TODO)
+
+  dueDate DateTime?
+
+  userId Int?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  user User? @relation(fields: [userId], references: [id])
+}
+
+model AIConversation {
+  id Int @id @default(autoincrement())
+
+  title String?
+
+  prompt String
+
+  response String
+
+  createdAt DateTime @default(now())
+}
+
+model Report {
+  id Int @id @default(autoincrement())
+
+  name String
+
+  module String
+
+  fileUrl String?
+
+  createdAt DateTime @default(now())
+}
