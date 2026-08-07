@@ -1,13 +1,22 @@
-export type AIChatRequest = {
+export interface AIResponse {
+  text: string;
+  data?: any;
+}
+
+export interface PromptTemplate {
+  id: string;
+  name: string;
+  description?: string;
   prompt: string;
-};
+  tags?: string[];
+  createdAt?: string;
+}
 
-export type AIChatResponse = {
-  success: boolean;
-  response: string;
-};
-
-export type AIMessage = {
-  role: "user" | "assistant";
-  content: string;
-};
+export interface AIJob {
+  id: string;
+  type: string;
+  prompt: string;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  result?: AIResponse;
+  createdAt?: string;
+}

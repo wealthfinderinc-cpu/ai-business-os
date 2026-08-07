@@ -1,35 +1,10 @@
-import { api } from "@/lib/api";
-import {
-  AIRequest,
-  AIResponse,
-  AIConversation,
-} from "@/types";
+import { api } from '@/lib/api';
+import { AIResponse } from '@/types/ai';
 
 export const AIService = {
-
-  chat(data: AIRequest) {
-    return api.post<AIResponse>(
-      "/api/ai/chat",
-      data
-    );
-  },
-
-  history() {
-    return api.get<AIConversation[]>(
-      "/api/ai/history"
-    );
-  },
-
-  prompts() {
-    return api.get(
-      "/api/ai/prompts"
-    );
-  },
-
-  reports() {
-    return api.get(
-      "/api/ai/reports"
-    );
-  },
-
+  chat: async (prompt: string) => api.post<AIResponse>('/ai/chat', { prompt }),
+  salesCoach: async (prompt: string) => api.post<AIResponse>('/ai/sales-coach', { prompt }),
+  report: async (prompt: string) => api.post<AIResponse>('/ai/report', { prompt }),
+  proposal: async (prompt: string) => api.post<AIResponse>('/ai/proposal', { prompt }),
+  content: async (prompt: string) => api.post<AIResponse>('/ai/content', { prompt })
 };
