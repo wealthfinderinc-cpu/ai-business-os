@@ -1,23 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+
+const departments: any[] = [];
 
 export async function GET() {
-  return NextResponse.json(
-    await prisma.department.findMany()
-  );
+  return NextResponse.json(departments);
 }
 
-export async function POST(
-  req: NextRequest
-) {
-  const body = await req.json();
-
-  const department =
-    await prisma.department.create({
-      data: body,
-    });
-
-  return NextResponse.json(
-    department
-  );
+export async function POST(request: Request) {
+  const payload = await request.json();
+  const item = { id: `dept_${Date.now()}`, ...payload };
+  departments.push(item);
+  return NextResponse.json(item);
 }

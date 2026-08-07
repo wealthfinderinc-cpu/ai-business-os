@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 
-const payrolls: any[] = [];
+const reviews: any[] = [];
 
 export async function GET() {
-  return NextResponse.json(payrolls);
+  return NextResponse.json(reviews);
 }
 
 export async function POST(request: Request) {
   const payload = await request.json();
-  const item = { id: `pay_${Date.now()}`, ...payload, status: 'draft', createdAt: new Date().toISOString() };
-  payrolls.push(item);
+  const item = { id: `rev_${Date.now()}`, ...payload, createdAt: new Date().toISOString() };
+  reviews.push(item);
   return NextResponse.json(item);
 }

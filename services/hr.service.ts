@@ -1,57 +1,35 @@
-import { api } from "@/lib/api";
-import {
-  Employee,
-  Attendance,
-  Department,
-} from "@/types";
+import { api } from '@/lib/api';
+import { Employee, AttendanceRecord, LeaveRequest, PayrollRecord, Department, Candidate, PerformanceReview } from '@/types/hr';
 
 export const HRService = {
+  // Employees
+  listEmployees: async (): Promise<Employee[]> => api.get('/hr/employees'),
+  getEmployee: async (id: string): Promise<Employee> => api.get(`/hr/employees/${id}`),
+  createEmployee: async (data: Partial<Employee>) => api.post('/hr/employees', data),
+  updateEmployee: async (id: string, data: Partial<Employee>) => api.put(`/hr/employees/${id}`, data),
 
-  getEmployees() {
-    return api.get<Employee[]>(
-      "/api/hr/employees"
-    );
-  },
+  // Attendance
+  listAttendance: async (): Promise<AttendanceRecord[]> => api.get('/hr/attendance'),
+  recordAttendance: async (data: Partial<AttendanceRecord>) => api.post('/hr/attendance', data),
 
-  getEmployee(id: number) {
-    return api.get<Employee>(
-      `/api/hr/employees/${id}`
-    );
-  },
+  // Leaves
+  listLeaves: async (): Promise<LeaveRequest[]> => api.get('/hr/leaves'),
+  requestLeave: async (data: Partial<LeaveRequest>) => api.post('/hr/leaves', data),
+  updateLeave: async (id: string, data: Partial<LeaveRequest>) => api.put(`/hr/leaves/${id}`, data),
 
-  createEmployee(data: any) {
-    return api.post(
-      "/api/hr/employees",
-      data
-    );
-  },
+  // Payroll
+  listPayroll: async (): Promise<PayrollRecord[]> => api.get('/hr/payroll'),
+  createPayroll: async (data: Partial<PayrollRecord>) => api.post('/hr/payroll', data),
 
-  updateEmployee(
-    id: number,
-    data: any
-  ) {
-    return api.put(
-      `/api/hr/employees/${id}`,
-      data
-    );
-  },
+  // Departments
+  listDepartments: async (): Promise<Department[]> => api.get('/hr/departments'),
+  createDepartment: async (data: Partial<Department>) => api.post('/hr/departments', data),
 
-  deleteEmployee(id: number) {
-    return api.delete(
-      `/api/hr/employees/${id}`
-    );
-  },
+  // Recruitment
+  listCandidates: async (): Promise<Candidate[]> => api.get('/hr/candidates'),
+  createCandidate: async (data: Partial<Candidate>) => api.post('/hr/candidates', data),
 
-  getAttendance() {
-    return api.get<Attendance[]>(
-      "/api/hr/attendance"
-    );
-  },
-
-  getDepartments() {
-    return api.get<Department[]>(
-      "/api/hr/departments"
-    );
-  },
-
+  // Performance
+  listReviews: async (): Promise<PerformanceReview[]> => api.get('/hr/reviews'),
+  createReview: async (data: Partial<PerformanceReview>) => api.post('/hr/reviews', data),
 };
