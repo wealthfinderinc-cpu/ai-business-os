@@ -1,31 +1,14 @@
-import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { NextResponse } from 'next/server';
+
+const invoiceStore: any[] = [];
 
 export async function GET() {
-  try {
-    const invoices = await prisma.order.findMany({
-      include: {
-        customer: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+  return NextResponse.json(invoiceStore);
+}
 
-    return NextResponse.json(invoices);
-
-  } catch (error) {
-
-    console.error(error);
-
-    return NextResponse.json(
-      {
-        success: false,
-      },
-      {
-        status: 500,
-      }
-    );
-
-  }
+export async function POST(request: Request) {
+  const payload = await request.json();
+  const item = { id: `inv_${Date.now()}`, number: `INV-${Date.now()}`, status: 'draft', ...payload, createdAt: new Date().toISOString() };
+  invoiceStore.push(item);
+  return NextResponse.json(item);
 }
