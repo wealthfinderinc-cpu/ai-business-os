@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
+import Breadcrumbs from "./Breadcrumbs";
 
 export default function DashboardLayout({
   children,
@@ -21,6 +22,7 @@ export default function DashboardLayout({
         <Header onMobileToggle={() => setMobileOpen((v) => !v)} />
 
         <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-20">
+          <Breadcrumbs />
           {children}
         </main>
       </div>
