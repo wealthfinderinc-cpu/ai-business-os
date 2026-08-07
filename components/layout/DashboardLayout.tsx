@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 
@@ -6,28 +9,18 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <div
-      style={{
-        display: "flex",
-      }}
-    >
-      <Sidebar />
+    <div className="min-h-screen flex bg-slate-50 text-slate-900">
+      {/* Sidebar (desktop + mobile off-canvas) */}
+      <Sidebar mobileOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
 
-      <div
-        style={{
-          flex: 1,
-          background: "#f3f4f6",
-          minHeight: "100vh",
-        }}
-      >
-        <Header />
+      {/* Main area */}
+      <div className="flex-1 flex flex-col">
+        <Header onMobileToggle={() => setMobileOpen((v) => !v)} />
 
-        <main
-          style={{
-            padding: 30,
-          }}
-        >
+        <main className="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {children}
         </main>
       </div>
