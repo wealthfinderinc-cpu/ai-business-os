@@ -1,26 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
-const campaigns = [
-  {
-    id: 1,
-    name: "WhatsApp August Campaign",
-    type: "WhatsApp",
-    audience: "Customers",
-    budget: 5000,
-    status: "Active",
-  },
-];
+// Simple in-memory store for demo purposes. Replace with Prisma/database in production.
+const campaigns: any[] = [];
 
-export async function GET() {
+export async function GET(request: Request) {
   return NextResponse.json(campaigns);
 }
 
-export async function POST(req: Request) {
-  const body = await req.json();
-
-  return NextResponse.json({
-    success: true,
-    data: body,
-    message: "Campaign Created",
-  });
+export async function POST(request: Request) {
+  const payload = await request.json();
+  const item = { id: `cmp_${Date.now()}`, ...payload, createdAt: new Date().toISOString() };
+  campaigns.push(item);
+  return NextResponse.json(item);
 }

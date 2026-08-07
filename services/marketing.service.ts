@@ -1,35 +1,40 @@
 import { api } from "@/lib/api";
-import { Campaign } from "@/types";
+import { Campaign, CampaignMetrics, LandingPage, LeadForm } from "@/types/marketing";
 
 export const MarketingService = {
-
-  getCampaigns() {
-    return api.get<Campaign[]>(
-      "/api/marketing/campaigns"
-    );
+  async listCampaigns(params?: Record<string, any>): Promise<Campaign[]> {
+    return api.get<Campaign[]>(`/marketing/campaigns` + (params ? '?'+new URLSearchParams(params).toString() : ''));
   },
 
-  createCampaign(data: any) {
-    return api.post(
-      "/api/marketing/campaigns",
-      data
-    );
+  async getCampaign(id: string): Promise<Campaign> {
+    return api.get(`/marketing/campaigns/${id}`);
   },
 
-  updateCampaign(
-    id: number,
-    data: any
-  ) {
-    return api.put(
-      `/api/marketing/campaigns/${id}`,
-      data
-    );
+  async createCampaign(data: Partial<Campaign>) {
+    return api.post(`/marketing/campaigns`, data);
   },
 
-  deleteCampaign(id: number) {
-    return api.delete(
-      `/api/marketing/campaigns/${id}`
-    );
+  async updateCampaign(id: string, data: Partial<Campaign>) {
+    return api.put(`/marketing/campaigns/${id}`, data);
   },
 
+  async deleteCampaign(id: string) {
+    return api.delete(`/marketing/campaigns/${id}`);
+  },
+
+  async listLandingPages(): Promise<LandingPage[]> {
+    return api.get(`/marketing/landing-pages`);
+  },
+
+  async createLandingPage(data: Partial<LandingPage>) {
+    return api.post(`/marketing/landing-pages`, data);
+  },
+
+  async listForms(): Promise<LeadForm[]> {
+    return api.get(`/marketing/forms`);
+  },
+
+  async getCampaignMetrics(id: string): Promise<CampaignMetrics> {
+    return api.get(`/marketing/campaigns/${id}/metrics`);
+  }
 };

@@ -1,34 +1,35 @@
+"use client";
+
+import React from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import MarketingDashboard from "@/components/marketing/MarketingDashboard";
-import CampaignStats from "@/components/marketing/CampaignStats";
-import CampaignForm from "@/components/marketing/CampaignForm";
-import CampaignTable from "@/components/marketing/CampaignTable";
+import CampaignManager from "@/components/marketing/CampaignManager";
+import ROIChart from "@/components/marketing/ROIChart";
+import CampaignsTable from "@/components/marketing/CampaignsTable";
 
 export default function MarketingPage() {
   return (
     <DashboardLayout>
-      <div className="space-y-8">
+      <div className="space-y-6">
+        <header className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold">Marketing Engine</h1>
+            <p className="text-sm text-slate-500">Manage campaigns across channels, track ROI and acquisition metrics.</p>
+          </div>
+        </header>
 
-        <div>
+        <section className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <CampaignManager />
+          </div>
 
-          <h1 className="text-4xl font-bold">
-            Marketing Automation
-          </h1>
+          <aside className="space-y-4">
+            <ROIChart />
+          </aside>
+        </section>
 
-          <p className="mt-2 text-slate-500">
-            Manage campaigns, WhatsApp, Email, SMS and Social Media.
-          </p>
-
-        </div>
-
-        <MarketingDashboard />
-
-        <CampaignStats />
-
-        <CampaignForm />
-
-        <CampaignTable />
-
+        <section>
+          <CampaignsTable />
+        </section>
       </div>
     </DashboardLayout>
   );
