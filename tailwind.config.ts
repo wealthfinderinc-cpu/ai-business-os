@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss';
+
+const config: Config = {
   content: [
     './app/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
@@ -18,7 +19,9 @@ module.exports = {
       },
     },
     extend: {
-      colors: {},
+      colors: {
+        // Add any project-specific color tokens here
+      },
       keyframes: {
         'fade-in': {
           '0%': { opacity: '0', transform: 'translateY(6px)' },
@@ -30,9 +33,13 @@ module.exports = {
       },
     },
   },
+  // Keep a safelist for tw-animate-css and other dynamic classes that may
+  // not be discovered by the static content scanner.
   safelist: [
     { pattern: /^animate-/, variants: ['sm', 'md', 'lg'] },
     { pattern: /^tw-animate-/, variants: [] },
   ],
   plugins: [],
 };
+
+export default config;
