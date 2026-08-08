@@ -185,7 +185,7 @@ export default function CustomerTable() {
 
         <div className="overflow-x-auto">
 
-          <table className="w-full border-collapse">          <table className="min-w-full text-sm">
+          <table className="w-full border-collapse min-w-full text-sm">
 
             <thead className="bg-slate-100">
 
@@ -340,7 +340,9 @@ export default function CustomerTable() {
 
         </div>
 
-      </div>      <EditCustomerDialog
+      </div>
+
+      <EditCustomerDialog
         open={editOpen}
         customer={selectedCustomer}
         onClose={() => {
