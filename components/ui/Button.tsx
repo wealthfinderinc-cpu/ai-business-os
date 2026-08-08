@@ -1,13 +1,8 @@
 "use client";
 
-import React from "react";
+import { Button as _Button, buttonVariants } from "./button";
 
-export function Button({ children, className = "", ...props }: any) {
-  return (
-    <button className={`btn-primary ${className}`} {...props}>
-      {children}
-    </button>
-  );
-}
+export const Button = _Button;
+export { buttonVariants };
 
 export default Button;
